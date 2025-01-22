@@ -1,16 +1,14 @@
-const selectors = require('../support/selectors'); // Certifique-se de ajustar o caminho
+const selectors = require('../support/selectors');
 
 describe('Testes de checkout e validação de produtos', () => {
   beforeEach(() => {
     cy.visit('https://www.saucedemo.com/');
 
-    // Realiza o login
-    cy.xpath(selectors.usernameInput).type('standard_user'); // Username
-    cy.get(selectors.passwordInput).type('secret_sauce'); // Senha
-    cy.get(selectors.loginButton).click(); // Clica no botão de login
+    cy.xpath(selectors.usernameInput).type('standard_user'); 
+    cy.get(selectors.passwordInput).type('secret_sauce'); 
+    cy.get(selectors.loginButton).click(); 
 
-    // Verifica se o login foi bem-sucedido
-    cy.contains(selectors.productText).should('be.visible'); // Verifica a presença do texto "Products"
+    cy.contains(selectors.productText).should('be.visible'); 
   });
 
   it('Deve adicionar vários itens ao carrinho', () => {
