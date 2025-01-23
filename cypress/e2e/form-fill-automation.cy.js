@@ -114,5 +114,46 @@ describe('Testando a página de Checkboxes', () => {
     cy.get('.rct-node').contains('Desktop').parent().find('input[type="checkbox"]').should('be.checked');
     cy.get('.rct-node').contains('Notes').parent().find('input[type="checkbox"]').should('be.checked');
   });
+
+describe('Automação da tela Radio Button - ToolsQA', () => {
+    beforeEach(() => {
+      // Ignorar erros de exceção não capturados
+      Cypress.on('uncaught:exception', (err, runnable) => false);
+  
+      // Visitar a página de Radio Button
+      cy.visit('https://demoqa.com/radio-button', { failOnStatusCode: false });
+    });
+  
+    it('Verifica a visibilidade dos botões de rádio', () => {
+      // Verifica se os rótulos associados estão visíveis
+      cy.get('label[for="yesRadio"]').should('be.visible');
+      cy.get('label[for="impressiveRadio"]').should('be.visible');
+      cy.get('label[for="noRadio"]').should('be.visible');
+      
+      // Verifica se o botão "No" está desabilitado
+      cy.get('input#noRadio').should('be.disabled');
+    });
+  
+    it('Seleciona o botão de rádio "Yes"', () => {
+      // Clica no rótulo associado ao botão "Yes"
+      cy.get('label[for="yesRadio"]').click();
+      // Verifica a mensagem de confirmação
+      cy.get('.mt-3').should('contain', 'Yes');
+    });
+  
+    it('Seleciona o botão de rádio "Impressive"', () => {
+      // Clica no rótulo associado ao botão "Impressive"
+      cy.get('label[for="impressiveRadio"]').click();
+      // Verifica a mensagem de confirmação
+      cy.get('.mt-3').should('contain', 'Impressive');
+    });
+  
+    it('Verifica que o botão de rádio "No" está desabilitado', () => {
+      // Verifica que o botão "No" está presente, mas desabilitado
+      cy.get('input#noRadio').should('be.disabled');
+      cy.get('label[for="noRadio"]').should('be.visible');
+    });
+  });
+  
   
 });
