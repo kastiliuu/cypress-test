@@ -114,6 +114,7 @@ describe('Testando a página de Checkboxes', () => {
     cy.get('.rct-node').contains('Desktop').parent().find('input[type="checkbox"]').should('be.checked');
     cy.get('.rct-node').contains('Notes').parent().find('input[type="checkbox"]').should('be.checked');
   });
+});
 
 describe('Automação da tela Radio Button - ToolsQA', () => {
     beforeEach(() => {
@@ -154,6 +155,51 @@ describe('Automação da tela Radio Button - ToolsQA', () => {
       cy.get('label[for="noRadio"]').should('be.visible');
     });
   });
+/// <reference types="cypress" />
+
+describe.only("Web Tables - DemoQA", () => {
+  Cypress.on("uncaught:exception", (err, runnable) => {
+    return false; // Ignora erros da aplicação para não falhar o teste
+  });
+
+  const url = "https://demoqa.com/webtables";
+
+  beforeEach(() => {
+    cy.visit('https://demoqa.com/webtables');
+  });
+
+  it("Deve verificar se a tabela está visível", () => {
+    cy.get(".rt-table").should("be.visible");
+  });
+
+  it("Deve adicionar um novo usuário e verificar na tabela", () => {
+    cy.get("#addNewRecordButton").click(); // Clica para adicionar um novo usuário
+    
+    cy.get("#firstName").type("Gabriel");
+    cy.get("#lastName").type("Sebastião");
+    cy.get("#userEmail").type("gabriel@example.com");
+    cy.get("#age").type("30");
+    cy.get("#salary").type("5000");
+    cy.get("#department").type("QA");
+    
+    cy.get("#submit").click(); // Confirma a adição
   
+    cy.wait(2000); // Aguarda atualização da tabela
   
+    // Busca o nome na tabela usando XPath
+    cy.xpath("//div[@class='rt-td'][contains(.,'Gabriel')]")
+      .scrollIntoView()
+      .should("be.visible");
+  });
+
+  it("Deve excluir um usuário da tabela", () => {
+    cy.get('[title="Delete"]').first().click();
+    
+    cy.get(".rt-tbody").should("not.contain", "Gabriel");
+  });
+
+  it("Deve buscar um usuário na tabela", () => {
+    cy.get("#searchBox").type("Cierra");
+    cy.get(".rt-tbody").should("contain", "Cierra");
+  });
 });
