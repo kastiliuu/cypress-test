@@ -26,11 +26,14 @@ jobs:
         run: npm ci
 
       - name: Rodar testes Cypress
-        run: npx cypress run
+        run: npx cypress run --record --video --headless
 
       - name: Armazenar vídeos e screenshots (se falhar)
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: cypress-artifacts
-          path: cypress/videos/
+          path: |
+            cypress/videos/
+            cypress/screenshots/
+          if-no-files-found: ignore
