@@ -28,6 +28,11 @@ jobs:
       - name: Rodar testes Cypress
         run: npx cypress run --record --video --headless --no-exit || echo "Testes falharam, verificando logs..."
 
+      - name: Criar attestation do build
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: "cypress/videos/"
+
       - name: Armazenar vídeos e screenshots (se falhar)
         if: failure()
         uses: actions/upload-artifact@v4
