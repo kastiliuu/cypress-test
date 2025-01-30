@@ -157,7 +157,7 @@ describe('Automação da tela Radio Button - ToolsQA', () => {
   });
 /// <reference types="cypress" />
 
-describe.only("Web Tables - DemoQA", () => {
+describe("Web Tables - DemoQA", () => {
   Cypress.on("uncaught:exception", (err, runnable) => {
     return false; // Ignora erros da aplicação para não falhar o teste
   });
@@ -201,5 +201,29 @@ describe.only("Web Tables - DemoQA", () => {
   it("Deve buscar um usuário na tabela", () => {
     cy.get("#searchBox").type("Cierra");
     cy.get(".rt-tbody").should("contain", "Cierra");
+  });
+});
+describe('Testes na tela de Links - DemoQA', () => {
+  beforeEach(() => {
+    cy.visit('https://demoqa.com/links'); // Acessa a página de Links antes de cada teste
+  });
+
+  it('Deve verificar se os links principais estão visíveis', () => {
+    cy.get('#simpleLink').should('be.visible'); // Verifica o link externo
+    cy.get('#dynamicLink').should('be.visible'); // Verifica o link dinâmico
+  });
+
+  it('Deve verificar se os links internos retornam status 200', () => {
+    cy.request('https://demoqa.com').its('status').should('eq', 200);
+  });
+
+  it('Deve clicar em um link interno e validar a resposta da API', () => {
+    cy.intercept('GET', '**/created').as('createdRequest');
+    cy.get('#created').click();
+    cy.wait('@createdRequest').its('response.statusCode').should('eq', 201);
+  });
+
+  it('Deve validar o funcionamento do link externo', () => {
+    cy.get('#simpleLink').should('have.attr', 'href', 'https://demoqa.com');
   });
 });
