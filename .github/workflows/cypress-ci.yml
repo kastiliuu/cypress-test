@@ -28,10 +28,15 @@ jobs:
       - name: Rodar testes Cypress
         run: npx cypress run --record --video --headless --no-exit || echo "Testes falharam, verificando logs..."
 
+      - name: Obter ID Token para autenticação
+        id: get_token
+        run: echo "::set-output name=token::$(curl -sSL https://token.actions.githubusercontent.com/.well-known/openid-configuration | jq -r .issuer)"
+
       - name: Criar attestation do build
         uses: actions/attest-build-provenance@v1
         with:
           subject-path: "cypress/videos/"
+          token: ${{ steps.get_token.outputs.token }}
 
       - name: Armazenar vídeos e screenshots (se falhar)
         if: failure()
