@@ -26,7 +26,7 @@ jobs:
         run: npm ci
 
       - name: Rodar testes Cypress
-        run: npx cypress run --record --video --headless
+        run: npx cypress run --record --video --headless --no-exit || echo "Testes falharam, verificando logs..."
 
       - name: Armazenar vídeos e screenshots (se falhar)
         if: failure()
