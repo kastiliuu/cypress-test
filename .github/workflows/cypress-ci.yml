@@ -28,18 +28,22 @@ jobs:
       - name: Rodar testes Cypress
         run: npx cypress run --record --video --headless --no-exit || echo "Testes falharam, verificando logs..."
 
-      # Passo para obter o ID Token
+      # Passo para autenticação OIDC (necessário para obtenção de ID Token)
       - name: Autenticar com OIDC
         id: oidc_auth
         run: |
           echo "ACTIONS_ID_TOKEN_REQUEST_URL=${ACTIONS_ID_TOKEN_REQUEST_URL}" >> $GITHUB_ENV
           echo "ACTIONS_ID_TOKEN_REQUEST_URL is set"
+        env:
+          ACTIONS_ID_TOKEN_REQUEST_URL: ${{ secrets.ACTIONS_ID_TOKEN_REQUEST_URL }}
 
       - name: Criar attestation do build
         uses: actions/attest-build-provenance@v1
         with:
           subject-path: "cypress/videos/"
-          # Não passamos o parâmetro 'token' porque a ação não o requer
+          push-to-registry: false
+          show-summary: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Armazenar vídeos e screenshots (se falhar)
         if: failure()
